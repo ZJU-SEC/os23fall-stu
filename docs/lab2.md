@@ -129,7 +129,8 @@
     #define PGROUNDUP(addr) ((addr + PGSIZE - 1) & (~(PGSIZE - 1)))
     #define PGROUNDDOWN(addr) (addr & (~(PGSIZE - 1)))
     ```
-* 请在添加/修改上述文件代码之后，确保工程可以正常运行，之后再开始实现 `lab2` (有可能需要同学自己调整一些位置的 `Makefile` 和一些源代码文件中头文件的引入)。
+* 请在添加/修改上述文件代码之后，确保工程可以正常运行，之后再开始实现 `lab2` (有可能需要同学自己调整一些位置的 `Makefile` 和一些源代码文件中头文件的引入，注意观察 `make` 的报错)。
+    * 在之后的实验过程中，你**可能**会遇到 make 之后提示 test 相关的函数重复定义，这是正常的。请仔细思考为什么会出现这个问题，病根据对 `Makefile` 的理解想办法解决这个问题（提示：你可以用一个操作很方便的解决这个问题）。
 * 在 lab2 中需要同学需要修改并补全 `arch/riscv/include/proc.h` `arch/riscv/kernel/proc.c` 两个文件。
 * 本次实验需要实现两种不同的调度算法，如何控制代码逻辑见 **4.4**
 
@@ -287,8 +288,8 @@ void dummy();
 * 当线程在运行时，由于时钟中断的触发，会将当前运行线程的上下文环境保存在栈上。当线程再次被调度时，会将上下文从栈上恢复，但是当我们创建一个新的线程，此时线程的栈为空，当这个线程被调度时，是没有上下文需要被恢复的，所以我们需要为线程 **第一次调度** 提供一个特殊的返回函数 `__dummy`
 
 * 在 `entry.S` 添加 `__dummy`
-    - 在`__dummy` 中将 sepc 设置为 `dummy()` 的地址，并使用 `sret` 从中断中返回。
-    - `__dummy` 与 `_traps`的 `restore` 部分相比，其实就是省略了从栈上恢复上下文的过程 ( 但是手动设置了 `sepc` )。
+    - 在 `__dummy` 中将 sepc 设置为 `dummy()` 的地址，并使用 `sret` 从中断中返回。
+    - `__dummy` 与 `_traps` 的 `restore` 部分相比，其实就是省略了从栈上恢复上下文的过程 ( 但是手动设置了 `sepc` )。
     ```asm
     # arch/riscv/kernel/entry.S
 
@@ -309,8 +310,8 @@ void dummy();
     }
     ```
 * 在 `entry.S` 中实现线程上下文切换 `__switch_to`:
-    - `__switch_to`接受两个 `task_struct` 指针作为参数
-    - 保存当前线程的`ra`，`sp`，`s0~s11`到当前线程的 `thread_struct` 中
+    - `__switch_to` 接受两个 `task_struct` 指针作为参数
+    - 保存当前线程的 `ra`，`sp`，`s0~s11` 到当前线程的 `thread_struct` 中
     - 将下一个线程的 `thread_struct` 中的相关数据载入到`ra`，`sp`，`s0~s11`中。
     ```asm
     # arch/riscv/kernel/entry.S
@@ -342,13 +343,13 @@ void dummy();
 
 #### 实现线程调度
 
-本次实验我们需要实现两种调度算法：1.短作业优先调度算法，2.优先级调度算法。
+本次实验我们需要实现两种调度算法：1.短作业优先调度算法，2.优先级调度算法。两个算法使用宏 `#ifdef` 进行控制。具体写的过程中可以考虑先实现其中一个，走完一遍流程之后再回过头来实现另外一个，再实现用 `#ifdef` 来控制代码（宏定义符号等参考[编译及测试](#编译及测试)）。
 
 ##### 短作业优先调度算法
 
 * 当需要进行调度时按照一下规则进行调度：
     * 遍历线程指针数组`task`（不包括 `idle` ，即 `task[0]` ）， 在所有运行状态 （`TASK_RUNNING`） 下的线程运行剩余时间`最少`的线程作为下一个执行的线程。
-    * 如果`所有`运行状态下的线程运行剩余时间都为0，则对 `task[1]` ~ `task[NR_TASKS-1]` 的运行剩余时间重新赋值 （使用 `rand()`） ，之后再重新进行调度。
+    * 如果 `所有` 运行状态下的线程运行剩余时间都为0，则对 `task[1]` ~ `task[NR_TASKS-1]` 的运行剩余时间重新赋值 （使用 `rand()`） ，之后再重新进行调度。
 
     ```c++
     // arch/riscv/kernel/proc.c
@@ -379,6 +380,8 @@ void dummy();
     - DPRIORITY （优先级调度）。
     - 在`proc.c`中使用 `#ifdef` ， `#endif` 来控制代码。 修改顶层Makefile为 `CFLAG = ${CF} ${INCLUDE} -DSJF` 或 `CFLAG = ${CF} ${INCLUDE} -DPRIORITY` (作业提交的时候 `Makefile` 选择任意一个都可以)
 - 本次实验引入了少量的测试样例，可以通过 `make` 命令（如 `make TEST`，`make test-run`，`make test-debug` ）控制，详见根目录的新 Makefile 文件。
+
+    > 注意，源代码中设置了 NR_TASKS 为 32，进行测试时请记得更改为对应 test case 的 NR_TASKS 值（16/8/4）。
     
     为了大家测试方便，测试的源代码已经给出在 `/src/lab2/test/schedule_test.c` 里，各位同学按需取用。
     测试代码中，为两种调度算法分别提供了 `NR_TASKS` 为 16，8，4 这 3 种情况下的测试样例。
