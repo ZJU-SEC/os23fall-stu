@@ -1,0 +1,1611 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://zju-sec.github.io/os23fall-stu/lab5/">
+      
+      
+        <link rel="prev" href="../lab4/">
+      
+      
+        <link rel="next" href="../lab6/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+    
+    
+      
+        <title>实验指导五 - 浙江大学23年秋冬操作系统实验</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.50c56a3b.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CCascadia:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Cascadia"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-5-rv64" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="浙江大学23年秋冬操作系统实验" class="md-header__button md-logo" aria-label="浙江大学23年秋冬操作系统实验" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            浙江大学23年秋冬操作系统实验
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              实验指导五
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ZJU-SEC/os23fall-stu" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ZJU-SEC/os23fall-stu
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="浙江大学23年秋冬操作系统实验" class="md-nav__button md-logo" aria-label="浙江大学23年秋冬操作系统实验" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    浙江大学23年秋冬操作系统实验
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ZJU-SEC/os23fall-stu" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ZJU-SEC/os23fall-stu
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    实验指导零
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    实验指导一
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    实验指导二
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab3/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    实验指导三
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    实验指导四
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    实验指导五
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    实验指导五
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      实验目的
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      实验环境
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      背景知识
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="背景知识">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vm_area_struct" class="md-nav__link">
+    <span class="md-ellipsis">
+      vm_area_struct 介绍
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#page-fault" class="md-nav__link">
+    <span class="md-ellipsis">
+      缺页异常 Page Fault
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="缺页异常 Page Fault">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#page-fault-handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      Page Fault Handler
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      实验步骤
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="实验步骤">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lab5" class="md-nav__link">
+    <span class="md-ellipsis">
+      在开始 Lab5 之前
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      准备工作
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vma" class="md-nav__link">
+    <span class="md-ellipsis">
+      实现 VMA
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#page-fault-handler_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Page Fault Handler
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Page Fault Handler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#risc-v-page-faults" class="md-nav__link">
+    <span class="md-ellipsis">
+      RISC-V Page Faults
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#page-fault_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      常规处理 Page Fault 的方式介绍
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#demand-paging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Demand Paging
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      编译及测试
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      思考题
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      作业提交
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    实验指导六
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab7/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    实验指导七
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    常见问题及解答
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      实验目的
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      实验环境
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      背景知识
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="背景知识">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vm_area_struct" class="md-nav__link">
+    <span class="md-ellipsis">
+      vm_area_struct 介绍
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#page-fault" class="md-nav__link">
+    <span class="md-ellipsis">
+      缺页异常 Page Fault
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="缺页异常 Page Fault">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#page-fault-handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      Page Fault Handler
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      实验步骤
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="实验步骤">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lab5" class="md-nav__link">
+    <span class="md-ellipsis">
+      在开始 Lab5 之前
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      准备工作
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vma" class="md-nav__link">
+    <span class="md-ellipsis">
+      实现 VMA
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#page-fault-handler_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Page Fault Handler
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Page Fault Handler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#risc-v-page-faults" class="md-nav__link">
+    <span class="md-ellipsis">
+      RISC-V Page Faults
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#page-fault_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      常规处理 Page Fault 的方式介绍
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#demand-paging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Demand Paging
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      编译及测试
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      思考题
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      作业提交
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="lab-5-rv64">Lab 5: RV64 缺页异常处理</h1>
+<blockquote>
+<p>非常建议大家先通读整篇实验指导，完成思考题后再动手写代码</p>
+</blockquote>
+<h2 id="_1">实验目的</h2>
+<ul>
+<li>通过 <strong>vm_area_struct</strong> 数据结构实现对 task <strong>多区域</strong>虚拟内存的管理。</li>
+<li>在 <strong>Lab4</strong> 实现用户态程序的基础上，添加缺页异常处理 <strong>Page Fault Handler</strong>。</li>
+</ul>
+<h2 id="_2">实验环境</h2>
+<ul>
+<li>Environment in previous labs.</li>
+</ul>
+<h2 id="_3">背景知识</h2>
+<p>下面介绍的是 Linux 中对于 VMA (virtual memory area) 和 Page Fault Handler 的介绍（顺便帮大家复习下期末考）。由于 Linux 巨大的体量，无论是 VMA 还是 Page Fault 的逻辑都较为复杂，这里只要求大家实现简化版本的，所以不要在阅读背景介绍的时候有太大的压力。</p>
+<h3 id="vm_area_struct">vm_area_struct 介绍</h3>
+<p>在 linux 系统中，<code>vm_area_struct</code> 是虚拟内存管理的基本单元，<code>vm_area_struct</code> 保存了有关连续虚拟内存区域（简称 vma）的信息。linux 具体某一 task 的虚拟内存区域映射关系可以通过 <a href="https://man7.org/linux/man-pages/man5/procfs.5.html">procfs</a> 读取 <code>/proc/pid/maps</code> 的内容来获取:</p>
+<p>比如，如下一个常规的 <code>bash</code>  task ，假设它的 task 号为 <code>7884</code> ，则通过输入如下命令，就可以查看该 task 具体的虚拟地址内存映射情况(部分信息已省略)。</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code>$<span class="w"> </span>cat<span class="w"> </span>/proc/7884/maps
+556f22759000-556f22786000<span class="w"> </span>r--p<span class="w"> </span><span class="m">00000000</span><span class="w"> </span><span class="m">08</span>:05<span class="w"> </span><span class="m">16515165</span><span class="w">                   </span>/usr/bin/bash
+556f22786000-556f22837000<span class="w"> </span>r-xp<span class="w"> </span>0002d000<span class="w"> </span><span class="m">08</span>:05<span class="w"> </span><span class="m">16515165</span><span class="w">                   </span>/usr/bin/bash
+556f22837000-556f2286e000<span class="w"> </span>r--p<span class="w"> </span>000de000<span class="w"> </span><span class="m">08</span>:05<span class="w"> </span><span class="m">16515165</span><span class="w">                   </span>/usr/bin/bash
+556f2286e000-556f22872000<span class="w"> </span>r--p<span class="w"> </span><span class="m">00114000</span><span class="w"> </span><span class="m">08</span>:05<span class="w"> </span><span class="m">16515165</span><span class="w">                   </span>/usr/bin/bash
+556f22872000-556f2287b000<span class="w"> </span>rw-p<span class="w"> </span><span class="m">00118000</span><span class="w"> </span><span class="m">08</span>:05<span class="w"> </span><span class="m">16515165</span><span class="w">                   </span>/usr/bin/bash
+556f22fa5000-556f2312c000<span class="w"> </span>rw-p<span class="w"> </span><span class="m">00000000</span><span class="w"> </span><span class="m">00</span>:00<span class="w"> </span><span class="m">0</span><span class="w">                          </span><span class="o">[</span>heap<span class="o">]</span>
+7fb9edb0f000-7fb9edb12000<span class="w"> </span>r--p<span class="w"> </span><span class="m">00000000</span><span class="w"> </span><span class="m">08</span>:05<span class="w"> </span><span class="m">16517264</span><span class="w">                   </span>/usr/lib/x86_64-linux-gnu/libnss_files-2.31.so
+7fb9edb12000-7fb9edb19000<span class="w"> </span>r-xp<span class="w"> </span><span class="m">00003000</span><span class="w"> </span><span class="m">08</span>:05<span class="w"> </span><span class="m">16517264</span><span class="w">                   </span>/usr/lib/x86_64-linux-gnu/libnss_files-2.31.so<span class="w">                 </span>
+...
+7ffee5cdc000-7ffee5cfd000<span class="w"> </span>rw-p<span class="w"> </span><span class="m">00000000</span><span class="w"> </span><span class="m">00</span>:00<span class="w"> </span><span class="m">0</span><span class="w">                          </span><span class="o">[</span>stack<span class="o">]</span>
+7ffee5dce000-7ffee5dd1000<span class="w"> </span>r--p<span class="w"> </span><span class="m">00000000</span><span class="w"> </span><span class="m">00</span>:00<span class="w"> </span><span class="m">0</span><span class="w">                          </span><span class="o">[</span>vvar<span class="o">]</span>
+7ffee5dd1000-7ffee5dd2000<span class="w"> </span>r-xp<span class="w"> </span><span class="m">00000000</span><span class="w"> </span><span class="m">00</span>:00<span class="w"> </span><span class="m">0</span><span class="w">                          </span><span class="o">[</span>vdso<span class="o">]</span>
+ffffffffff600000-ffffffffff601000<span class="w"> </span>--xp<span class="w"> </span><span class="m">00000000</span><span class="w"> </span><span class="m">00</span>:00<span class="w"> </span><span class="m">0</span><span class="w">                  </span><span class="o">[</span>vsyscall<span class="o">]</span>
+</code></pre></div></td></tr></table></div>
+<p>从中我们可以读取如下一些有关该 task 内虚拟内存映射的关键信息：</p>
+<ul>
+<li><code>vm_start</code>  :  (第1列) 指的是该段虚拟内存区域的开始地址</li>
+<li><code>vm_end</code>    :  (第2列) 指的是该段虚拟内存区域的结束地址</li>
+<li><code>vm_flags</code>  :  (第3列) 该 <code>vm_area</code> 的一组权限(rwx)标志，<code>vm_flags</code> 的具体取值定义可参考linux源代码的 <a href="https://elixir.bootlin.com/linux/v6.6.4/source/include/linux/mm.h#L261">linux/mm.h</a></li>
+<li><code>vm_pgoff</code>  :  (第4列) 虚拟内存映射区域在文件内的偏移量</li>
+<li><code>vm_file</code>   :  (第5/6/7列) 分别表示：映射文件所属设备号/以及指向关联文件结构的指针/以及文件名</li>
+</ul>
+<p>注意这里记录的 <code>vm_start</code> 和 <code>vm_end</code> 都是用户态的虚拟地址，并且内核并不会将除了用户程序会用到的内存区域以外的部分添加成为 VMA。</p>
+<p>我们注意到，一段内存中的内容可能是由磁盘中的文件映射的。如果这样的内存的 VMA 产生了缺页异常，说明文件中对应的页不在操作系统的 buffer pool 中（回想起数据库课上学习的磁盘缓存了吗），或者是由于 buffer pool 的调度策略被换出到磁盘上了。这时候操作系统会用驱动读取硬盘上的内容，放入 buffer pool，然后修改当前 task 的页表来让其能够用原来的地址访问文件内容。而这一切对用户程序来说是完全透明的，除了访问延迟。</p>
+<p>除了跟文件建立联系以外，VMA 还可能是一块匿名 (anonymous) 的区域。例如被标成 <code>[stack]</code> 的这一块区域，并没有对应的文件。</p>
+<p>其它保存在 <code>vm_area_struct</code> 中的信息还有：</p>
+<ul>
+<li><code>vm_ops</code>: 该 <code>vm_area</code> 中的一组工作函数，其中是一系列函数指针，可以根据需要进行定制</li>
+<li><code>vm_next/vm_prev</code>: 同一 task 的所有虚拟内存区域由 <strong>链表结构</strong> 链接起来，这是分别指向前后两个 <code>vm_area_struct</code> 结构体的指针</li>
+</ul>
+<p>可以发现，原本的 Linux 使用链表对一个 task 内的 VMA 进行管理。但是由于如今一个程序可能体量非常巨大，所以现在的 Linux 已经用虚拟地址为索引来建立红黑树了（如果你喜欢可以在这次实验中也手搓一棵红黑树）。</p>
+<h3 id="page-fault">缺页异常 Page Fault</h3>
+<p>在一个启用了虚拟内存的系统上，当正在运行的程序访问一个内存地址时，如果该地址当前未被内存管理单元（MMU）映射，则由计算机<strong>硬件</strong>引发<strong>缺页异常</strong>。访问未被映射的页或访问权限不足，都会导致该类异常的发生。处理缺页异常通常是操作系统内核的一部分，当处理缺页异常时，操作系统将尝试使所需页面在物理内存中的位置变得可访问（建立新的映射关系到虚拟内存）。而如果在非法访问内存的情况下，即发现触发 <code>Page Fault</code> 的虚拟内存地址（Bad Address）不在当前 task  <code>vm_area_struct</code> 链表中所定义的允许访问的虚拟内存地址范围内，或访问位置的权限条件不满足时，缺页异常处理将终止该程序的继续运行。 </p>
+<h4 id="page-fault-handler">Page Fault Handler</h4>
+<p>总的说来，处理缺页异常需要进行以下步骤：</p>
+<ol>
+<li>捕获异常</li>
+<li>寻找当前 task 中<strong>导致产生了异常的地址</strong>对应的 VMA</li>
+<li>判断产生异常的原因</li>
+<li>如果是匿名区域，那么开辟<strong>一页</strong>内存，然后把这一页映射到产生异常的 task 的页表中。如果不是，那么首先将硬盘中的内容读入 buffer pool，将 buffer pool 中这段内存映射给 task。</li>
+<li>返回到产生了该缺页异常的那条指令，并继续执行程序</li>
+</ol>
+<p>当 Linux 发生缺页异常并找到了当前 task 中对应的 <code>vm_area_struct</code> 后，可以根据以下信息来判断发生异常的原因</p>
+<ol>
+<li>CSRs</li>
+<li><code>vm_area_struct</code> 中记录的信息</li>
+<li>发生异常的虚拟地址对应的 PTE (page table entry) 中记录的信息</li>
+</ol>
+<p>并对当前的异常进行处理。</p>
+<p>Page Fault 是一类比较复杂的异常，可以看到 Linux 内核中的处理时的逻辑是充满了 <code>if</code> <code>else</code> 乃至 <code>goto</code> 的：
+<img alt="Understanding the Linux Kernel 中绘制的 Linux 2.6 的 Page Fault Handler 逻辑" src="../img/page-fault-handler.png" /></p>
+<!-- #### 3.2.1 RISC-V Page Faults
+RISC-V 异常处理：当系统运行发生异常时，可即时地通过解析 `scause` 寄存器的值，识别如下三种不同的 Page Fault。
+
+**SCAUSE** 寄存器指示发生异常的种类：
+
+| Interrupt | Exception Code | Description |
+| --- | --- | --- |
+| 0 | 12 | Instruction Page Fault |
+| 0 | 13 | Load Page Fault |
+| 0 | 15 | Store/AMO Page Fault |
+
+#### 常规处理 **Page Fault** 的方式介绍
+处理缺页异常时所需的信息如下：
+
+* 触发 **Page Fault** 时访问的虚拟内存地址 VA。当触发 page fault 时，`stval` 寄存器被被硬件自动设置为该出错的 VA 地址
+* 导致 **Page Fault** 的类型：
+    * Exception Code = 12: page fault caused by an instruction fetch 
+    * Exception Code = 13: page fault caused by a read  
+    * Exception Code = 15: page fault caused by a write 
+* 发生 **Page Fault** 时的指令执行位置，保存在 `sepc` 中
+* 当前 task 合法的 **VMA** 映射关系，保存在 `vm_area_struct` 链表中
+
+处理缺页异常的方式：
+
+- 当缺页异常发生时，检查 VMA
+- 如果当前访问的虚拟地址在 VMA 中没有记录，即是不合法的地址，则运行出错（本实验不涉及）
+- 如果当前访问的虚拟地址在 VMA 中存在记录，则进行相应的映射即可：
+  - 如果访问的页是存在数据的，如访问的是代码，则需要从文件系统中读取内容，随后进行映射
+  - 否则是匿名映射，即找一个可用的帧映射上去即可 -->
+
+<h2 id="_4">实验步骤</h2>
+<h3 id="lab5">在开始 Lab5 之前</h3>
+<p>我们的实验已经进行了将近一学期，在持续开发的代码上添加内容可能会让你的思维比较混乱。如果你认为你的代码可能需要整理，这里有一份简要的 Checklist，可以让你的代码更简洁，并让你在实现 Lab5 的时候思路更加清晰。如果你要按照以下的建议进行修改，请务必确认做好备份，并在改一小部分后就编译运行一次，不要让你辛苦写的代码 crash。当然，这一个步骤并不是强制的，完全复用之前的代码仍然可以完成 Lab5。</p>
+<ol>
+<li>
+<p>由于一些历史遗留问题，在之前的实验指导中的 <code>task_struct</code> 中包含了一个 <code>thread_info</code> 域，但其实这个域并不必要，因为我们在内核态可以用 <code>sp</code> 和 <code>sscratch</code> 来存储内核态和用户态的两个指针，不需要借助 <code>thread_info</code> 中的两个域。因为 <code>switch_to</code> 中直接使用了汇编来访问 <code>task_struct</code> 中的内容，需要修改 <code>__switch_to</code> 中用于访问 <code>thread</code> 这个成员的一些 offset。当然如果你在别的地方也直接使用了汇编来访存 <code>task_struct</code> 中的值，你也需要一并修改。这里需要你善用 <code>grep</code> 命令。</p>
+</li>
+<li>
+<p>调整 <code>pt_regs</code> 和 <code>trap_handler</code>，来更好地捕获异常并辅助调试。比如我使用这样的 <code>pt_regs</code> 和 <code>trap_handler</code>:
+    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">pt_regs</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">zero</span><span class="p">;</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">t6</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">sepc</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">sstatus</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">stval</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">sscratch</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">scause</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">trap_handler</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">scause</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">pt_regs</span><span class="w"> </span><span class="o">*</span><span class="n">regs</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">scause</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0x8000000000000005</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">   </span><span class="p">}</span><span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">scause</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">sys_call_num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">regs</span><span class="o">-&gt;</span><span class="n">a7</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sys_call_num</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="p">...</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sys_call_num</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">172</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="p">...</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sys_call_num</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">220</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="p">...</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">printk</span><span class="p">(</span><span class="s">&quot;[S] Unhandled syscall: %lx&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sys_call_num</span><span class="p">);</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">scause</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">...){</span>
+<span class="w">        </span><span class="p">...</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printk</span><span class="p">(</span><span class="s">&quot;[S] Unhandled trap, &quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printk</span><span class="p">(</span><span class="s">&quot;scause: %lx, &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">scause</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printk</span><span class="p">(</span><span class="s">&quot;stval: %lx, &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">regs</span><span class="o">-&gt;</span><span class="n">stval</span><span class="p">);</span>
+<span class="w">        </span><span class="n">printk</span><span class="p">(</span><span class="s">&quot;sepc: %lx</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">regs</span><span class="o">-&gt;</span><span class="n">sepc</span><span class="p">);</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+    这样发生了没有处理的异常、中断或者是系统调用的时候，内核会直接进入死循环。你可以调整 <code>printk</code> 的内容来让内核给你输出你需要的信息。</p>
+</li>
+</ol>
+<h3 id="_5">准备工作</h3>
+<ul>
+<li>此次实验基于 lab4 同学所实现的代码进行。</li>
+<li>从 repo 同步以下文件夹: user 并按照以下步骤将这些文件正确放置。
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code>.
+└── user
+    ├── Makefile
+    ├── getpid.c
+    ├── link.lds
+    ├── printf.c
+    ├── start.S
+    ├── stddef.h
+    ├── stdio.h
+    ├── syscall.h
+    └── uapp.S
+</code></pre></div></td></tr></table></div></li>
+<li>在 <code>user/getpid.c</code> 中我们设置了四个 <code>main</code> 函数。在实现了 <code>Page Fault</code> 之后第一个 <code>main</code> 函数可以成功运行，在 lab6 实现了 <code>fork</code> 之后其余三个 <code>main</code> 函数可以成功运行。这些用户程序的行为需要同学们自行理解（估计期末考也一定会考到）。</li>
+</ul>
+<h3 id="vma">实现 VMA</h3>
+<p>修改 <code>proc.h</code>，增加如下相关结构：(因为链表太麻烦了，这次让大家用数组存储 VMA)</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="cp">#define VM_X_MASK         0x0000000000000008</span>
+<span class="cp">#define VM_W_MASK         0x0000000000000004</span>
+<span class="cp">#define VM_R_MASK         0x0000000000000002</span>
+<span class="cp">#define VM_ANONYM         0x0000000000000001</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">vm_area_struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">vm_start</span><span class="p">;</span><span class="w">          </span><span class="cm">/* VMA 对应的用户态虚拟地址的开始   */</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">vm_end</span><span class="p">;</span><span class="w">            </span><span class="cm">/* VMA 对应的用户态虚拟地址的结束   */</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">vm_flags</span><span class="p">;</span><span class="w">          </span><span class="cm">/* VMA 对应的 flags */</span>
+
+<span class="w">    </span><span class="cm">/* uint64_t file_offset_on_disk */</span><span class="w">  </span><span class="cm">/* 原本需要记录对应的文件在磁盘上的位置，</span>
+<span class="cm">                                但是我们只有一个文件 uapp，所以暂时不需要记录 */</span>
+
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">vm_content_offset_in_file</span><span class="p">;</span><span class="w">                </span><span class="cm">/* 如果对应了一个文件，</span>
+<span class="cm">                        那么这块 VMA 起始地址对应的文件内容相对文件起始位置的偏移量，</span>
+<span class="cm">                                          也就是 ELF 中各段的 p_offset 值 */</span>
+
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">vm_content_size_in_file</span><span class="p">;</span><span class="w">                </span><span class="cm">/* 对应的文件内容的长度。</span>
+<span class="cm">                                                      思考为什么还需要这个域?</span>
+<span class="cm">                                                      和 (vm_end-vm_start)</span>
+<span class="cm">                                                      一比，不是冗余了吗? */</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">task_struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">state</span><span class="p">;</span><span class="w">    </span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">counter</span><span class="p">;</span><span class="w"> </span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">priority</span><span class="p">;</span><span class="w"> </span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">pid</span><span class="p">;</span><span class="w">    </span>
+
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">thread_struct</span><span class="w"> </span><span class="kr">thread</span><span class="p">;</span>
+<span class="w">    </span><span class="n">pagetable_t</span><span class="w"> </span><span class="n">pgd</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">vma_cnt</span><span class="p">;</span><span class="w">                       </span><span class="cm">/* 下面这个数组里的元素的数量 */</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">vm_area_struct</span><span class="w"> </span><span class="n">vmas</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w">          </span><span class="cm">/* 为什么可以开大小为 0 的数组?</span>
+<span class="cm">                                这个定义可以和前面的 vma_cnt 换个位置吗? */</span>
+<span class="p">};</span>
+</code></pre></div></td></tr></table></div>
+<p>每一个 vm_area_struct 都对应于 task 地址空间的唯一<strong>连续</strong>区间。注意我们这里的 <code>vm_flag</code> 和 <code>p_flags</code> 并没有按 bit 进行对应，请同学们仔细对照 bit 的位置，以免出现问题。</p>
+<p>为了支持 <code>Demand Paging</code>（见 4.3），我们需要支持对 vm_area_struct 的添加和查找。</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">do_mmap</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">task_struct</span><span class="w"> </span><span class="o">*</span><span class="n">task</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">flags</span><span class="p">,</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">vm_content_offset_in_file</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">vm_content_size_in_file</span><span class="p">);</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">vm_area_struct</span><span class="w"> </span><span class="o">*</span><span class="n">find_vma</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">task_struct</span><span class="w"> </span><span class="o">*</span><span class="n">task</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">addr</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li><code>find_vma</code> 查找包含某个 addr 的 vma，该函数主要在 Page Fault 处理时起作用。</li>
+<li><code>do_mmap</code> 创建一个新的 vma</li>
+</ul>
+<h3 id="page-fault-handler_1">Page Fault Handler</h3>
+<h4 id="risc-v-page-faults">RISC-V Page Faults</h4>
+<p>RISC-V 异常处理：当系统运行发生异常时，可即时地通过解析 <code>scause</code> 寄存器的值，识别如下三种不同的 Page Fault。</p>
+<p><strong>SCAUSE</strong> 寄存器指示发生异常的种类：</p>
+<table>
+<thead>
+<tr>
+<th>Interrupt</th>
+<th>Exception Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>12</td>
+<td>Instruction Page Fault</td>
+</tr>
+<tr>
+<td>0</td>
+<td>13</td>
+<td>Load Page Fault</td>
+</tr>
+<tr>
+<td>0</td>
+<td>15</td>
+<td>Store/AMO Page Fault</td>
+</tr>
+</tbody>
+</table>
+<h4 id="page-fault_1">常规处理 <strong>Page Fault</strong> 的方式介绍</h4>
+<p>处理缺页异常时所需的信息如下：</p>
+<ul>
+<li>触发 <strong>Page Fault</strong> 时访问的虚拟内存地址 VA。当触发 page fault 时，<code>stval</code> 寄存器被被硬件自动设置为该出错的 VA 地址</li>
+<li>导致 <strong>Page Fault</strong> 的类型：<ul>
+<li>Exception Code = 12: page fault caused by an instruction fetch </li>
+<li>Exception Code = 13: page fault caused by a read  </li>
+<li>Exception Code = 15: page fault caused by a write </li>
+</ul>
+</li>
+<li>发生 <strong>Page Fault</strong> 时的指令执行位置，保存在 <code>sepc</code> 中</li>
+<li>当前 task 合法的 <strong>VMA</strong> 映射关系，保存在 <code>vm_area_struct</code> 链表中</li>
+</ul>
+<p>处理缺页异常的方式：</p>
+<ul>
+<li>当缺页异常发生时，检查 VMA</li>
+<li>如果当前访问的虚拟地址在 VMA 中没有记录，即是不合法的地址，则运行出错（本实验不涉及）</li>
+<li>如果当前访问的虚拟地址在 VMA 中存在记录，则进行相应的映射即可：</li>
+<li>如果访问的页是存在数据的，如访问的是代码，则需要从文件系统中读取内容，随后进行映射</li>
+<li>否则是匿名映射，即找一个可用的帧映射上去即可</li>
+</ul>
+<h4 id="demand-paging"><strong>Demand Paging</strong></h4>
+<!-- * 在映射页面时，我们不真正对页表进行修改，只在 `mm->mmap` 链表上添加一个 `vma` 记录。 -->
+<!-- * 当我们真正访问这个页面时，我们再根据缺页的地址，找到其所在的 `vma`，根据 `vma` 中的信息对页表进行映射。 -->
+<p>在前面的实验中提到，Linux 在 Page Fault Handler 中需要考虑三类数据的值。我们的实验经过简化，只需要根据 <code>vm_area_struct</code> 中的 <code>vm_flags</code> 来确定当前发生了什么样的错误，并且需要如何处理。在初始化一个 task 时我们既<strong>不分配内存</strong>，又<strong>不更改页表项来建立映射</strong>。回退到用户态进行程序执行的时候就会因为没有映射而发生 Page Fault，进入我们的 Page Fault Handler 后，我们再分配空间（按需要拷贝内容）进行映射。</p>
+<p>例如，我们原本要为用户态虚拟地址映射一个页，需要进行如下操作：</p>
+<ol>
+<li>使用 <code>alloc_page</code> 分配一个页的空间</li>
+<li>对这个页中的数据进行填充</li>
+<li>将这个页映射到用户空间，供用户程序访问。并设置好对应的 U, W, X, R 权限，最后将 V 置为 1，代表其有效。</li>
+</ol>
+<p>而为了减少 task 初始化时的开销，我们对一个 <strong>Segment</strong> 或者 <strong>用户态的栈</strong> 只需分别建立一个 VMA。</p>
+<p>修改 <code>task_init</code> 函数代码，更改为 <code>Demand Paging</code></p>
+<ul>
+<li>取消之前实验中对 <code>U-MODE</code> 代码以及栈进行的映射</li>
+<li>调用 <code>do_mmap</code> 函数，建立用户 task 的虚拟地址空间信息，在本次实验中仅包括两个区域:<ul>
+<li>代码和数据区域：该区域从 ELF 给出的 Segment 起始用户态虚拟地址 <code>phdr-&gt;p_vaddr</code> 开始，对应文件中偏移量为 <code>phdr-&gt;p_offset</code> 开始的部分。权限参考 <code>phdr-&gt;p_flags</code> 进行设置。</li>
+<li>用户栈：范围为 <code>[USER_END - PGSIZE, USER_END)</code> ，权限为 <code>VM_READ | VM_WRITE</code>, 并且是匿名的区域。
+<!-- * 由于之前 <code>load_program</code> 会同时做好代码和用户栈的设置，此时需要改为只做代码区域的映射。且该函数不再会在 task_init 被调用了，而是在 Page Fault 处理时在进行调用。 --></li>
+</ul>
+</li>
+</ul>
+<!-- 对以下两个区域创建对应的 `vm_area_struct`, 并且映射到用户空间，但是不真的分配页。映射需要一个物理地址，我们可以先使用 NULL，而在之后真的分配了页之后，再填充真正的物理地址的值。
+
+* 代码区域：该区域从 ELF 给出的起始地址 `ehdr->e_entry` 开始，大小为 `uapp_end - uapp_start`(`ramdisk_end - ramdisk_start`).
+* 用户栈 -->
+
+<p>在完成上述修改之后，如果运行代码我们就可以截获一个 page fault，如下所示（其中三个 <code>address0</code> 是同一个地址，表示了用户态需要运行的第一条指令的位置）：</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code>[S] Switch to: pid: 1, priority: 1, counter: 4
+[S] Unhandled trap, scause: 000000000000000c, stval: address0, sepc: address0
+
+************************** uapp elf_header **************************
+
+❯ readelf -a uapp
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF64
+  Data:                              2&#39;s complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           RISC-V
+  Version:                           0x1
+  Entry point address:               address0
+
+......
+************************** uapp elf_header **************************
+</code></pre></div></td></tr></table></div>
+<p>可以看到，发生了缺页异常的 <code>sepc</code> 是 <code>0x100e8</code>，说明我们在 <code>sret</code> 来执行用户态程序的时候，第一条指令就因为 <code>V-bit</code> 为 0 表征其映射的地址无效而发生了异常，并且发生的异常是 Insturction Page Fault。</p>
+<p>实现 Page Fault 的检测与处理</p>
+<ul>
+<li>修改 <code>trap.c</code>, 添加捕获 Page Fault 的逻辑</li>
+<li>当捕获了 <code>Page Fault</code> 之后，需要实现缺页异常的处理函数 <code>do_page_fault</code>。 我们最先捕获到了一条指令页错误异常，这个异常需要你新分配一个页，并拷贝 uapp 这个 ELF 文件中的对应内容到新分配的页内，然后将这个页映射到用户空间中。</li>
+<li>我们之后还会捕获到 <code>0xd, 0xf</code> 类型的异常，处理的逻辑可以参考这个流程：
+  <!-- * 对于第一次 Page Fault，即缺失代码页导致的 Instruction Page Fault，原则上说，我们需要先到磁盘上读取程序到内存中，随后再对这块内存进行映射。但本次实验中不涉及文件操作，uapp 已经在内存中了，所以我们只需要把代码映射到相应的位置即可。
+  * 对于第二次 Page Fault，即缺失栈页导致的 Store/AMO Page Fault，我们只用分配一个匿名的页（通过 kalloc），随后将其映射上去即可。
+  * 如何区别这两者?可以思考一下。 -->
+</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">do_page_fault</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">pt_regs</span><span class="w"> </span><span class="o">*</span><span class="n">regs</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/*</span>
+<span class="cm">     1. 通过 stval 获得访问出错的虚拟内存地址（Bad Address）</span>
+<span class="cm">     2. 通过 find_vma() 查找 Bad Address 是否在某个 vma 中</span>
+<span class="cm">     3. 分配一个页，将这个页映射到对应的用户地址空间</span>
+<span class="cm">     4. 通过 (vma-&gt;vm_flags &amp; VM_ANONYM) 获得当前的 VMA 是否是匿名空间</span>
+<span class="cm">     5. 根据 VMA 匿名与否决定将新的页清零或是拷贝 uapp 中的内容</span>
+<span class="cm">    */</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<h3 id="_6">编译及测试</h3>
+<p>在测试时，由于大家电脑性能都不一样，如果出现了时钟中断频率比用户打印频率高很多的情况，可以减少用户程序里的 while 循环的次数来加快打印。这里的实例仅供参考，只要 OS 和用户态程序运行符合你的预期，那就是正确的。</p>
+<ul>
+<li>输出示例</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span></pre></div></td><td class="code"><div><pre><span></span><code>OpenSBI v1.1
+   ____                    _____ ____ _____
+  / __ \                  / ____|  _ \_   _|
+ | |  | |_ __   ___ _ __ | (___ | |_) || |
+ | |  | | &#39;_ \ / _ \ &#39;_ \ \___ \|  _ &lt; | |
+ | |__| | |_) |  __/ | | |____) | |_) || |_
+  \____/| .__/ \___|_| |_|_____/|____/_____|
+        | |
+        |_|
+
+Platform Name             : riscv-virtio,qemu
+Platform Features         : medeleg
+Platform HART Count       : 1
+Platform IPI Device       : aclint-mswi
+Platform Timer Device     : aclint-mtimer @ 10000000Hz
+Platform Console Device   : uart8250
+Platform HSM Device       : ---
+Platform Reboot Device    : sifive_test
+Platform Shutdown Device  : sifive_test
+Firmware Base             : 0x80000000
+Firmware Size             : 288 KB
+Runtime SBI Version       : 1.0
+
+Domain0 Name              : root
+Domain0 Boot HART         : 0
+Domain0 HARTs             : 0*
+Domain0 Region00          : 0x0000000002000000-0x000000000200ffff (I)
+Domain0 Region01          : 0x0000000080000000-0x000000008007ffff ()
+Domain0 Region02          : 0x0000000000000000-0xffffffffffffffff (R,W,X)
+Domain0 Next Address      : 0x0000000080200000
+Domain0 Next Arg1         : 0x0000000087e00000
+Domain0 Next Mode         : S-mode
+Domain0 SysReset          : yes
+
+Boot HART ID              : 0
+Boot HART Domain          : root
+Boot HART Priv Version    : v1.12
+Boot HART Base ISA        : rv64imafdch
+Boot HART ISA Extensions  : time,sstc
+Boot HART PMP Count       : 16
+Boot HART PMP Granularity : 4
+Boot HART PMP Address Bits: 54
+Boot HART MHPM Count      : 16
+Boot HART MIDELEG         : 0x0000000000001666
+Boot HART MEDELEG         : 0x0000000000f0b509
+[S] buddy_init done!
+[S] proc_init done!
+2023 Hello RISC-V
+Time remaining: 1, switching to PID: 1
+[U] pid: 1, sp is 0000003fffffffe0, this is print No. 1
+[U] pid: 1, sp is 0000003fffffffe0, this is print No. 2
+[U] pid: 1, sp is 0000003fffffffe0, this is print No. 3
+[U] pid: 1, sp is 0000003fffffffe0, this is print No. 4
+[U] pid: 1, sp is 0000003fffffffe0, this is print No. 5
+Time remaining: 5, switching to PID: 4
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 1
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 2
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 3
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 4
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 5
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 6
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 7
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 8
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 9
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 10
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 11
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 12
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 13
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 14
+[U] pid: 4, sp is 0000003fffffffe0, this is print No. 15
+Time remaining: 10, switching to PID: 2
+[U] pid: 2, sp is 0000003fffffffe0, this is print No. 1
+[U] pid: 2, sp is 0000003fffffffe0, this is print No. 2
+[U] pid: 2, sp is 0000003fffffffe0, this is print No. 3
+[U] pid: 2, sp is 0000003fffffffe0, this is print No. 4
+[U] pid: 2, sp is 0000003fffffffe0, this is print No. 5
+[U] pid: 2, sp is 0000003fffffffe0, this is print No. 6
+[U] pid: 2, sp is 0000003fffffffe0, this is print No. 7
+[U] pid: 2, sp is 0000003fffffffe0, this is print No. 8
+[U] pid: 2, sp is 0000003fffffffe0, this is print No. 9
+......
+</code></pre></div></td></tr></table></div>
+<h2 id="_7">思考题</h2>
+<p>根据实验指导和代码框架来回答这些问题：</p>
+<ol>
+<li><code>uint64_t vm_content_size_in_file;</code> 对应的文件内容的长度。为什么还需要这个域?</li>
+<li><code>struct vm_area_struct vmas[0];</code> 为什么可以开大小为 0 的数组? 这个定义可以和前面的 vma_cnt 换个位置吗?</li>
+</ol>
+<h2 id="_8">作业提交</h2>
+<p>同学需要提交实验报告以及整个工程代码。在提交前请使用 <code>make clean</code> 清除所有构建产物。请在处理 Page Fault 前，输出一段信息表明发生了 Page Fault，并且输出 <code>sepc, scause, stval</code>。并且对于我们给出的 <code>main</code> 函数，请截图到每个进程至少被调度到两次为止。并标明在 <code>main</code> 作为 <code>uapp</code> 的情况下，一共会发生多少次 Page Fault。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../lab4/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 实验指导四">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                实验指导四
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../lab6/" class="md-footer__link md-footer__link--next" aria-label="Next: 实验指导六">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                实验指导六
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.top", "navigation.footer", "navigation.tracking"], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
