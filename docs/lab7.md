@@ -49,7 +49,7 @@ edit [path] [offset] [string] # 将路径为 path 的文件，
             # 偏移量为 offset 的部分开始，写为 string
 ```
 
-同步 `os23fall-stu` 中的 `user` 文件夹，替换原有的用户态程序为 `nish`。为了能够正确启动 QEMU，需要下载[磁盘镜像](https://drive.google.com/file/d/1CZF8z2v8ZyAYXT1DlYMwzOO1ohAj41-W/view?usp=sharing)并放置在项目目录下。
+同步 `os23fall-stu` 中的 `user` 文件夹，替换原有的用户态程序为 `nish`。为了能够正确启动 QEMU，需要下载[磁盘镜像](https://drive.google.com/file/d/1CZF8z2v8ZyAYXT1DlYMwzOO1ohAj41-W/view?usp=sharing)并放置在项目目录下。同时，还需要将 `NR_TASKS` 修改为 2，也就是仅初始化 `nish` 这一个用户态进程。
 
 ```plaintext
 lab7
